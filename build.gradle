@@ -1,6 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '2.0.2.RELEASE'
+		geotoolsVersion = '19.1'
 	}
 	repositories {
 		mavenCentral()
@@ -10,7 +11,8 @@ buildscript {
 	}
 }
 
-apply plugin: 'groovy'
+//apply plugin: 'groovy'
+apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -26,31 +28,16 @@ repositories {
 	jcenter()
 }
 
-/*
-configurations {
-	all*.exclude module : 'spring-boot-starter-logging'
-}
-*/
- configurations {
-	 all*.exclude module : 'slf4j-log4j12'
- }
- 
-/*
-configurations {
-	providedRuntime
-	compile.exclude(group: 'ch.qos.logback')
-}
-*/
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.codehaus.groovy:groovy')
-	compile('org.geoscript:geoscript-groovy:1.11.0')
-	/*
-	compile('org.geoscript:geoscript-groovy:1.11.0') {
-        exclude module : 'slf4j-log4j12'
-    }
-    */
+	compile("org.geotools:gt-main:${geotoolsVersion}")
+	//compile("org.geotools:gt-jdbc:${geotoolsVersion}")
+	//compile("org.geotools:gt-data:${geotoolsVersion}")
+	compile("org.geotools.jdbc:gt-jdbc-postgis:${geotoolsVersion}")
+	compile("org.geotools:gt-geojson:${geotoolsVersion}")
+	//compile("org.geotools:gt-shapefile:${geotoolsVersion}")
+	compile("org.geotools:gt-epsg-hsql:${geotoolsVersion}")
+	//compile('org.codehaus.groovy:groovy')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
