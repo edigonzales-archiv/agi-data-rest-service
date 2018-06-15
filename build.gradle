@@ -31,9 +31,11 @@ configurations {
 	all*.exclude module : 'spring-boot-starter-logging'
 }
 */
+/*
  configurations {
 	 all*.exclude module : 'slf4j-log4j12'
  }
+*/
  
 /*
 configurations {
@@ -44,13 +46,7 @@ configurations {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.codehaus.groovy:groovy')
-	compile('org.geoscript:geoscript-groovy:1.11.0')
-	/*
-	compile('org.geoscript:geoscript-groovy:1.11.0') {
-        exclude module : 'slf4j-log4j12'
-    }
-    */
+	compile('org.codehaus.groovy:groovy-all')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

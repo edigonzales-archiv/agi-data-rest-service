@@ -1,7 +1,7 @@
 package ch.so.agi.gdi.datarestservice.controller
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,62 +13,34 @@ import static org.springframework.web.bind.annotation.RequestMethod.*
 
 import org.springframework.http.ResponseEntity
 
-import geoscript.layer.io.GeoJSONWriter
-import geoscript.geom.Point
-import geoscript.workspace.Workspace
-import geoscript.workspace.PostGIS
-
+import groovy.sql.Sql
+import groovy.json.JsonOutput
 
 @Controller
 class MainController {
-	private final Logger log = LoggerFactory.getLogger(this.getClass())
+	//private final Logger log = LoggerFactory.getLogger(this.getClass())
+	Logger log = LoggerFactory.getLogger( this.getClass() );
+	
 	
 	//@GetMapping("/fubar")
 	@RequestMapping(value="/fubar", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	ResponseEntity<?> fubar() {
-		println("Hallo Welt.")
-		
-		def point = new Point(0,0)
-		def poly = point.buffer(10)
-		//println(poly.wkt)
-		log.info(poly.wkt)
-		
-		def params = [
-			dbtype: 'postgis',
-			database: 'pub',
-			host: '192.168.50.6',
-			port: 5432,
-			user: 'ddluser',
-			passwd: 'ddluser'
-		]
-		//def workspace = Workspace.getWorkspace(params)
-		/*
-		List<Map> parameters = Workspace.getWorkspaceParameters("Postgis")
-		parameters.each { Map param ->
-			println "Parameter = ${param.key} Type = ${param.type} Required? ${param.required}"
+		log.info "Hallo Stefan"
+				
+		def dbUrl = "jdbc:postgresql://192.168.50.6/pub"
+		def dbUsr = "ddluser"
+		def dbPwd = "ddluser"
+		def dbDriver = "org.postgresql.Driver" 
+		def sql = Sql.newInstance(dbUrl, dbUsr, dbPwd, dbDriver)
+		sql.eachRow("SELECT t_id, art_txt, bfs_nr, ST_AsGeoJSON(geometrie) FROM agi_mopublic_pub.mopublic_bodenbedeckung_proj LIMIT 1") { row ->
+			log.info row.toString()
+			//log.info JsonOutput.toJson(row.toString())
 		}
-		*/
+		
+		sql.close()
 		
 		
-		PostGIS workspace = new PostGIS("pub", "192.168.50.6", "5432", "agi_mopublic_pub", "ddluser", "ddluser", false, false, 'Expose primary keys:true')
-		//println workspace.getLayers()
-		//println workspace.getLayers()
-		
-		List<Map> parameters = Workspace.getWorkspaceParameters("Postgis")
-		parameters.each { Map param ->
-			println "Parameter = ${param.key} Type = ${param.type} Required? ${param.required}"
-		}
-
-		
-		println workspace.get("mopublic_bodenbedeckung_proj").getSchema()
-		
-		GeoJSONWriter writer = new GeoJSONWriter()
-		String json = writer.write(workspace.get("mopublic_bodenbedeckung_proj"))
-		//println json
-		
-		//return ResponseEntity.ok().body("Hallo Welt.");
-		workspace.close()
-		return ResponseEntity.ok().body(json);
+		return ResponseEntity.ok().body("Fubar");
 	}
 }
