@@ -1,7 +1,7 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.2.RELEASE'
-		geotoolsVersion = '19.1'
+		springBootVersion = '2.0.3.RELEASE'
+		jtsVersion = '1.15.0'
 	}
 	repositories {
 		mavenCentral()
@@ -11,8 +11,7 @@ buildscript {
 	}
 }
 
-apply plugin: 'groovy'
-//apply plugin: 'java'
+apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -22,15 +21,20 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	maven { url "http://download.osgeo.org/webdav/geotools/" }
-	maven { url "http://repo.boundlessgeo.com/main/" }
 	mavenCentral()
-	jcenter()
+	maven {url "http://download.osgeo.org/webdav/geotools/"}
 }
+
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.codehaus.groovy:groovy-all')
+	implementation('com.mapbox.mapboxsdk:mapbox-sdk-geojson:3.2.0')
+	//implementation("org.locationtech.jts:jts:${jtsVersion}")
+	//implementation("org.locationtech.jts:jts-modules:${jtsVersion}")
+	implementation("org.locationtech.jts:jts-core:${jtsVersion}")
+	implementation("org.locationtech.jts:jts-io:${jtsVersion}")
+	implementation("org.locationtech.jts.io:jts-io-common:${jtsVersion}")
+	implementation("org.json:json:20180130")
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
