@@ -28,9 +28,7 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
-	implementation('com.mapbox.mapboxsdk:mapbox-sdk-geojson:3.2.0')
-	//implementation("org.locationtech.jts:jts:${jtsVersion}")
-	//implementation("org.locationtech.jts:jts-modules:${jtsVersion}")
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation("org.locationtech.jts:jts-core:${jtsVersion}")
 	implementation("org.locationtech.jts:jts-io:${jtsVersion}")
 	implementation("org.locationtech.jts.io:jts-io-common:${jtsVersion}")

@@ -2,15 +2,16 @@ package ch.so.agi.gdi.datarestservice.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import com.mapbox.geojson.*;
+import ch.so.agi.gdi.datarestservice.service.GetDataImpl;
 
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKBReader;
@@ -28,8 +29,28 @@ import java.sql.SQLException;
 @Controller
 public class MainController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+		
+	@Autowired
+	private GetDataImpl getDataService;
+
+	@RequestMapping(value="/{data_set_view_name}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	ResponseEntity<?> getDataSet(@PathVariable("data_set_view_name") String dataSetViewName) {
+		
+		// get db credentials from config-db
+		// get attributes from config-db
+		
+		getDataService.getDataSetViewByName(dataSetViewName, "jdbc:postgresql://192.168.50.6:5432/pub", "ddluser", "ddluser");
+		
+		
+		
+		
+		return ResponseEntity.ok().body(dataSetViewName);
+	}
+
 	
-	@RequestMapping(value="/fubar", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	
+	@RequestMapping(value="/test/fubar", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	ResponseEntity<?> fubar() {
 		log.info("Hallo Stefan.");
@@ -39,7 +60,7 @@ public class MainController {
 		String dbPwd = "ddluser";
 		String dbDriver = "org.postgresql.Driver";
 		
-		String sql = "SELECT t_id, art_txt, bfs_nr, ST_AsGeoJSON(geometrie)::text, ST_AsEWKB(geometrie) AS geometry FROM agi_mopublic_pub.mopublic_bodenbedeckung_proj LIMIT 1";
+		String sql = "SELECT t_id, art_txt, bfs_nr, ST_AsEWKB(geometrie) AS geometry FROM agi_mopublic_pub.mopublic_bodenbedeckung_proj LIMIT 1";
 		try (Connection conn = DriverManager.getConnection(dbUrl, dbUsr, dbPwd); PreparedStatement ps = conn.prepareStatement(sql);) {
 			try (ResultSet rs = ps.executeQuery();) {
 				while (rs.next()) {
