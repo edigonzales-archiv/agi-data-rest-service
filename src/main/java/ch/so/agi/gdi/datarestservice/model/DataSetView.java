@@ -1,6 +1,8 @@
 package ch.so.agi.gdi.datarestservice.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name = "data_set_view")
@@ -27,8 +30,8 @@ public class DataSetView implements Serializable {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "gdi_oid_data_set")
-	private Long gdiOidDataSet;
+//	@Column(name = "gdi_oid_data_set")
+//	private Long gdiOidDataSet;
 	
 	@Column(name = "geometry_column")
 	private String geometryColumn;
@@ -57,6 +60,7 @@ public class DataSetView implements Serializable {
 		this.description = description;
 	}
 
+	/*
 	public Long getGdiOidDataSet() {
 		return gdiOidDataSet;
 	}
@@ -64,7 +68,7 @@ public class DataSetView implements Serializable {
 	public void setGdiOidDataSet(Long gdiOidDataSet) {
 		this.gdiOidDataSet = gdiOidDataSet;
 	}
-
+	 */
 	public String getGeometryColumn() {
 		return geometryColumn;
 	}
@@ -77,4 +81,18 @@ public class DataSetView implements Serializable {
 	@JoinColumn(name = "gdi_oid_data_set")
 	private DataSet dataSet;
 
+	public DataSet getDataSet() {
+		return this.dataSet;
+	}
+	
+	@OneToMany(mappedBy = "dataSetView")
+	private List<DataSetViewAttribute> dataSetViewAttributes = new ArrayList<DataSetViewAttribute>();
+
+	public List<DataSetViewAttribute> getDataSetViewAttributes() {
+		return dataSetViewAttributes;
+	}
+
+//	public void setDataSetViewAttributes(List<DataSetViewAttribute> dataSetViewAttributes) {
+//		this.dataSetViewAttributes = dataSetViewAttributes;
+//	}
 }

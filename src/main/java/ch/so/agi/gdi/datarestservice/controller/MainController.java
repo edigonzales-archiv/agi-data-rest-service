@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import ch.so.agi.gdi.datarestservice.model.DataSetView;
+import ch.so.agi.gdi.datarestservice.repository.DataSetViewRepository;
 import ch.so.agi.gdi.datarestservice.service.GetDataImpl;
 
 import org.locationtech.jts.io.ParseException;
@@ -25,6 +27,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Controller
 public class MainController {
@@ -32,6 +35,9 @@ public class MainController {
 		
 	@Autowired
 	private GetDataImpl getDataService;
+	
+    @Autowired
+    private DataSetViewRepository dataSetViewRepository;
 
 	@RequestMapping(value="/{data_set_view_name}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -39,6 +45,13 @@ public class MainController {
 		
 		// get db credentials from config-db
 		// get attributes from config-db
+		Optional<DataSetView> dataSetView = dataSetViewRepository.findById(1399L); // 1049: ch.so.agi.grundbuchplan_f.bodenbedeckung_projektiert
+		log.info("*********");
+		log.info(dataSetView.get().getName().toString());
+		log.info(dataSetView.get().getDataSet().getDataSetName());
+		log.info(dataSetView.get().getDataSetViewAttributes().get(0).getName().toString());
+		log.info("*********");
+		
 		
 		getDataService.getDataSetViewByName(dataSetViewName, "jdbc:postgresql://192.168.50.6:5432/pub", "ddluser", "ddluser");
 		

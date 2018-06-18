@@ -1,20 +1,19 @@
 package ch.so.agi.gdi.datarestservice.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity(name = "data_set")
+@Entity(name = "data_set_view_attributes")
 @Table(schema = "gdi_knoten")
-public class DataSet implements Serializable {
+public class DataSetViewAttribute implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -24,15 +23,15 @@ public class DataSet implements Serializable {
 	
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "description")
 	private String description;
-	
-	@Column(name = "gdi_oid_data_source")
-	private Long gdiOidDataSource;
 
-	@Column(name = "data_set_name")
-	private String dataSetName;
+	@Column(name = "alias")
+	private String alias;
+	
+	@Column(name = "attribute_order")
+	private int attributeOrder;
 
 	public Long getGdiOid() {
 		return gdiOid;
@@ -58,22 +57,28 @@ public class DataSet implements Serializable {
 		this.description = description;
 	}
 
-	public Long getGdiOidDataSource() {
-		return gdiOidDataSource;
+	public String getAlias() {
+		return alias;
 	}
 
-	public void setGdiOidDataSource(Long gdiOidDataSource) {
-		this.gdiOidDataSource = gdiOidDataSource;
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
-	public String getDataSetName() {
-		return dataSetName;
+	public int getAttributeOrder() {
+		return attributeOrder;
 	}
 
-	public void setDataSetName(String dataSetName) {
-		this.dataSetName = dataSetName;
+	public void setAttributeOrder(int attributeOrder) {
+		this.attributeOrder = attributeOrder;
 	}
+
+	@ManyToOne
+	@JoinColumn(name = "gdi_oid_data_set_view")
+	private DataSetView dataSetView;
 	
-	@OneToMany(mappedBy = "dataSet")
-	private List<DataSetView> dataSetViews = new ArrayList<DataSetView>();
+	public DataSetView getDataSetView() {
+		return dataSetView;
+	}
+
 }
