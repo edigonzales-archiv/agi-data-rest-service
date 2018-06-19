@@ -36,21 +36,25 @@ public class MainController {
 	@Autowired
 	private GetDataImpl getDataService;
 	
-    @Autowired
-    private DataSetViewRepository dataSetViewRepository;
+//    @Autowired
+//    private DataSetViewRepository dataSetViewRepository;
 
 	@RequestMapping(value="/{data_set_view_name}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	ResponseEntity<?> getDataSet(@PathVariable("data_set_view_name") String dataSetViewName) {
 		
+		
+		
 		// get db credentials from config-db
-		// get attributes from config-db
-		Optional<DataSetView> dataSetView = dataSetViewRepository.findById(1399L); // 1049: ch.so.agi.grundbuchplan_f.bodenbedeckung_projektiert
-		log.info("*********");
-		log.info(dataSetView.get().getName().toString());
-		log.info(dataSetView.get().getDataSet().getDataSetName());
-		log.info(dataSetView.get().getDataSetViewAttributes().get(0).getName().toString());
-		log.info("*********");
+		// get attributes from config-db (da drin stehen "nur" die aktivierten und ggf aliase)
+		
+//		Optional<DataSetView> dataSetView = dataSetViewRepository.findById(2481L); 
+//		log.info("*********");
+//		log.info(dataSetView.get().getName().toString());
+//		log.info(dataSetView.get().getDataSet().getDataSetName());
+//		log.info(dataSetView.get().getDataSetViewAttributes().get(0).getName().toString());
+//		log.info(String.valueOf(dataSetView.get().getDataSetViewAttributes().size()));
+//		log.info("*********");
 		
 		
 		getDataService.getDataSetViewByName(dataSetViewName, "jdbc:postgresql://192.168.50.6:5432/pub", "ddluser", "ddluser");

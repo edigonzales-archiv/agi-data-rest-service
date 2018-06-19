@@ -6,32 +6,40 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Entity(name = "data_set")
+@Entity(name = "data_source")
 @Table(schema = "gdi_knoten")
-public class DataSet implements Serializable {
+public class DataSource implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public enum ConnectionType {
+        database, directory;
+    }
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "gdi_oid")
 	private Long gdiOid;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "description")
 	private String description;
-	
-	@Column(name = "data_set_name")
-	private String dataSetName;
+
+	@Column(name = "connection")
+	private String connection;
+
+	@Column(name = "connection_type")
+    @Enumerated(EnumType.STRING)
+	private ConnectionType connection_type;
 
 	public Long getGdiOid() {
 		return gdiOid;
@@ -57,22 +65,26 @@ public class DataSet implements Serializable {
 		this.description = description;
 	}
 
-	public String getDataSetName() {
-		return dataSetName;
+	public String getConnection() {
+		return connection;
 	}
 
-	public void setDataSetName(String dataSetName) {
-		this.dataSetName = dataSetName;
+	public void setConnection(String connection) {
+		this.connection = connection;
 	}
-	
-	@ManyToOne
-	@JoinColumn(name = "gdi_oid_data_source")
-	private DataSource dataSource;
 
-	public DataSource getDataSource() {
-		return this.dataSource;
+	public ConnectionType getConnection_type() {
+		return connection_type;
+	}
+
+	public void setConnection_type(ConnectionType connection_type) {
+		this.connection_type = connection_type;
 	}
 	
-	@OneToMany(mappedBy = "dataSet")
-	private List<DataSetView> dataSetViews = new ArrayList<DataSetView>();
+	@OneToMany(mappedBy = "dataSource")
+	private List<DataSet> dataSets = new ArrayList<DataSet>();
+
+	public List<DataSet> getDataSets() {
+		return dataSets;
+	}
 }
